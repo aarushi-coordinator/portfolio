@@ -44,15 +44,18 @@ const initPortfolio = () => {
 
   const counterNumbers = document.querySelectorAll('.counter-card .number');
 
+  const easeOutQuad = (t) => t * (2 - t);
+
   const animateCounter = (element) => {
     if (!element || element.dataset.animated) return;
     const target = Number(element.dataset.count || 0);
-    const duration = 1400;
+    const duration = 1600;
     const start = performance.now();
 
     const tick = (now) => {
       const progress = Math.min((now - start) / duration, 1);
-      const value = Math.floor(progress * target);
+      const eased = easeOutQuad(progress);
+      const value = Math.floor(eased * target);
       element.textContent = `${value}${element.dataset.suffix || ''}`;
       if (progress < 1) requestAnimationFrame(tick);
       else element.dataset.animated = 'true';
