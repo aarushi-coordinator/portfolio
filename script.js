@@ -44,36 +44,6 @@ const initPortfolio = () => {
 
   const counterNumbers = Array.from(document.querySelectorAll('.counter-card .number'));
 
-  const easeOutQuad = (t) => t * (2 - t);
-
-  const animateCounters = () => {
-    const duration = 1800;
-    const start = performance.now();
-
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = easeOutQuad(progress);
-
-      counterNumbers.forEach((element) => {
-        const target = Number(element.dataset.count || 0);
-        const value = Math.floor(eased * target);
-        element.textContent = `${value}${element.dataset.suffix || ''}`;
-      });
-
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        counterNumbers.forEach((element) => {
-          element.dataset.animated = 'true';
-          const target = Number(element.dataset.count || 0);
-          element.textContent = `${target}${element.dataset.suffix || ''}`;
-        });
-      }
-    };
-
-    requestAnimationFrame(tick);
-  };
-
   if (typeof IntersectionObserver !== 'undefined') {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -85,10 +55,8 @@ const initPortfolio = () => {
     }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
 
     revealItems.forEach((item) => observer.observe(item));
-    setTimeout(animateCounters, 150);
   } else {
     revealItems.forEach((item) => item.classList.add('visible'));
-    animateCounters();
   }
 
   const words = ['Coordinating Teams.', 'Managing Projects.', 'Delivering Results.'];
