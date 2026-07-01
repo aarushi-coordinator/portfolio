@@ -42,36 +42,36 @@ const initPortfolio = () => {
     link.addEventListener('click', () => navLinks?.classList.remove('open'));
   });
 
-  const counterNumbers = document.querySelectorAll('.counter-card .number');
+  const counterNumbers = Array.from(document.querySelectorAll('.counter-card .number'));
 
   const easeOutQuad = (t) => t * (2 - t);
 
-  const animateCounter = (element) => {
-    if (!element || element.dataset.animated) return;
-    const target = Number(element.dataset.count || 0);
-    const duration = 1600;
+  const animateCounters = () => {
+    const duration = 1800;
     const start = performance.now();
 
     const tick = (now) => {
       const progress = Math.min((now - start) / duration, 1);
       const eased = easeOutQuad(progress);
-      const value = Math.floor(eased * target);
-      element.textContent = `${value}${element.dataset.suffix || ''}`;
-      if (progress < 1) requestAnimationFrame(tick);
-      else element.dataset.animated = 'true';
+
+      counterNumbers.forEach((element) => {
+        const target = Number(element.dataset.count || 0);
+        const value = Math.floor(eased * target);
+        element.textContent = `${value}${element.dataset.suffix || ''}`;
+      });
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        counterNumbers.forEach((element) => {
+          element.dataset.animated = 'true';
+          const target = Number(element.dataset.count || 0);
+          element.textContent = `${target}${element.dataset.suffix || ''}`;
+        });
+      }
     };
 
     requestAnimationFrame(tick);
-  };
-
-  const animateVisibleCounters = () => {
-    counterNumbers.forEach((item) => {
-      if (item.dataset.animated) return;
-      const rect = item.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom >= 0) {
-        animateCounter(item);
-      }
-    });
   };
 
   if (typeof IntersectionObserver !== 'undefined') {
@@ -79,22 +79,16 @@ const initPortfolio = () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          if (entry.target.classList.contains('counter-card')) {
-            animateCounter(entry.target.querySelector('.number'));
-          }
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
 
     revealItems.forEach((item) => observer.observe(item));
-    animateVisibleCounters();
-    window.addEventListener('scroll', animateVisibleCounters, { passive: true });
-    setTimeout(animateVisibleCounters, 250);
-    counterNumbers.forEach((item) => animateCounter(item));
+    setTimeout(animateCounters, 150);
   } else {
     revealItems.forEach((item) => item.classList.add('visible'));
-    counterNumbers.forEach((item) => animateCounter(item));
+    animateCounters();
   }
 
   const words = ['Coordinating Teams.', 'Managing Projects.', 'Delivering Results.'];
