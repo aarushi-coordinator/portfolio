@@ -1,39 +1,50 @@
 const initPortfolio = () => {
-  const themeToggle = document.querySelector('.theme-toggle');
+  const themeToggleButton = document.querySelector('.theme-toggle');
   const menuToggle = document.querySelector('.menu-toggle');
   const navLinks = document.querySelector('.nav-links');
   const backToTop = document.querySelector('.back-to-top');
   const typedText = document.querySelector('.typed-text');
   const form = document.querySelector('.contact-form');
   const revealItems = document.querySelectorAll('.reveal');
-  const themeToggleButton = themeToggle || document.querySelector('.theme-toggle');
-  var prefersDark = false;
-  if (window.matchMedia) {
-    var mq = window.matchMedia('(prefers-color-scheme: dark)');
-    prefersDark = mq && mq.matches;
-  }
 
-  var savedTheme = null;
+  const getSystemPrefersDark = () => {
+    if (window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  };
+
+  let savedTheme = null;
   try {
     savedTheme = localStorage.getItem('portfolio-theme');
   } catch (error) {
     console.warn('Theme preference could not be loaded:', error);
   }
 
-  const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+  const currentTheme = savedTheme || (getSystemPrefersDark() ? 'dark' : 'light');
 
-  document.body.classList.toggle('dark', initialTheme === 'dark');
-  themeToggleButton?.setAttribute('aria-label', initialTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-
-  themeToggleButton?.addEventListener('click', () => {
-    const isDark = document.body.classList.toggle('dark');
+  const applyTheme = (theme) => {
+    const isDark = theme === 'dark';
+    document.body.classList.toggle('dark', isDark);
+    if (themeToggleButton) {
+      themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      themeToggleButton.textContent = isDark ? '☀️' : '🌙';
+    }
     try {
-      localStorage.setItem('portfolio-theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('portfolio-theme', theme);
     } catch (error) {
       console.warn('Theme preference could not be saved:', error);
     }
-    themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-  });
+  };
+
+  applyTheme(currentTheme);
+
+  if (themeToggleButton) {
+    themeToggleButton.addEventListener('click', () => {
+      const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+  }
 
   menuToggle?.addEventListener('click', () => {
     navLinks?.classList.toggle('open');

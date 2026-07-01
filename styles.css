@@ -147,12 +147,21 @@ body.dark .header {
   border-radius: 50%;
   cursor: pointer;
   box-shadow: var(--shadow);
+  position: relative;
+  z-index: 2;
 }
 
 .nav-actions {
   display: flex;
   gap: 0.6rem;
   align-items: center;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
 }
 
 .menu-toggle {
