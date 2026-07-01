@@ -42,6 +42,8 @@ const initPortfolio = () => {
     link.addEventListener('click', () => navLinks?.classList.remove('open'));
   });
 
+  const counterNumbers = document.querySelectorAll('.counter-card .number');
+
   const animateCounter = (element) => {
     if (!element || element.dataset.animated) return;
     const target = Number(element.dataset.count || 0);
@@ -59,6 +61,15 @@ const initPortfolio = () => {
     requestAnimationFrame(tick);
   };
 
+  const animateVisibleCounters = () => {
+    counterNumbers.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom >= 0) {
+        animateCounter(item);
+      }
+    });
+  };
+
   if (typeof IntersectionObserver !== 'undefined') {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -70,12 +81,13 @@ const initPortfolio = () => {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
 
     revealItems.forEach((item) => observer.observe(item));
+    animateVisibleCounters();
   } else {
     revealItems.forEach((item) => item.classList.add('visible'));
-    document.querySelectorAll('.counter-card .number').forEach((item) => animateCounter(item));
+    counterNumbers.forEach((item) => animateCounter(item));
   }
 
   const words = ['Coordinating Teams.', 'Managing Projects.', 'Delivering Results.'];
