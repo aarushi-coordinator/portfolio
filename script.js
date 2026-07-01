@@ -6,6 +6,7 @@ const initPortfolio = () => {
   const typedText = document.querySelector('.typed-text');
   const form = document.querySelector('.contact-form');
   const revealItems = document.querySelectorAll('.reveal');
+  const themeToggleButton = themeToggle || document.querySelector('.theme-toggle');
   var prefersDark = false;
   if (window.matchMedia) {
     var mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -22,16 +23,16 @@ const initPortfolio = () => {
   const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
 
   document.body.classList.toggle('dark', initialTheme === 'dark');
-  themeToggle?.setAttribute('aria-label', initialTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  themeToggleButton?.setAttribute('aria-label', initialTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
 
-  themeToggle?.addEventListener('click', () => {
+  themeToggleButton?.addEventListener('click', () => {
     const isDark = document.body.classList.toggle('dark');
     try {
       localStorage.setItem('portfolio-theme', isDark ? 'dark' : 'light');
     } catch (error) {
       console.warn('Theme preference could not be saved:', error);
     }
-    themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
   });
 
   menuToggle?.addEventListener('click', () => {
