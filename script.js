@@ -66,6 +66,7 @@ const initPortfolio = () => {
 
   const animateVisibleCounters = () => {
     counterNumbers.forEach((item) => {
+      if (item.dataset.animated) return;
       const rect = item.getBoundingClientRect();
       if (rect.top < window.innerHeight && rect.bottom >= 0) {
         animateCounter(item);
@@ -88,6 +89,8 @@ const initPortfolio = () => {
 
     revealItems.forEach((item) => observer.observe(item));
     animateVisibleCounters();
+    window.addEventListener('scroll', animateVisibleCounters, { passive: true });
+    setTimeout(animateVisibleCounters, 250);
   } else {
     revealItems.forEach((item) => item.classList.add('visible'));
     counterNumbers.forEach((item) => animateCounter(item));
