@@ -1,5 +1,4 @@
 const initPortfolio = () => {
-  const loadingScreen = document.querySelector('.loading-screen');
   const themeToggle = document.querySelector('.theme-toggle');
   const menuToggle = document.querySelector('.menu-toggle');
   const navLinks = document.querySelector('.nav-links');
@@ -7,9 +6,13 @@ const initPortfolio = () => {
   const typedText = document.querySelector('.typed-text');
   const form = document.querySelector('.contact-form');
   const revealItems = document.querySelectorAll('.reveal');
-  const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+  var prefersDark = false;
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    prefersDark = mq && mq.matches;
+  }
 
-  let savedTheme = null;
+  var savedTheme = null;
   try {
     savedTheme = localStorage.getItem('portfolio-theme');
   } catch (error) {
@@ -20,11 +23,6 @@ const initPortfolio = () => {
 
   document.body.classList.toggle('dark', initialTheme === 'dark');
   themeToggle?.setAttribute('aria-label', initialTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-
-  setTimeout(() => {
-    loadingScreen?.classList.add('hidden');
-    setTimeout(() => loadingScreen?.remove(), 450);
-  }, 700);
 
   themeToggle?.addEventListener('click', () => {
     const isDark = document.body.classList.toggle('dark');

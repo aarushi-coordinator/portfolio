@@ -88,37 +88,6 @@ section {
   box-shadow: var(--shadow);
 }
 
-.loading-screen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, var(--bg), #dbe5ff);
-  display: grid;
-  place-items: center;
-  z-index: 1000;
-  transition: opacity 0.4s ease;
-}
-
-.loading-screen.hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-body.dark .loading-screen {
-  background: linear-gradient(135deg, #0f172a, #040816);
-}
-
-.loader {
-  width: 60px;
-  height: 60px;
-  border: 4px solid rgba(79, 109, 245, 0.15);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 
 .header {
   position: sticky;
