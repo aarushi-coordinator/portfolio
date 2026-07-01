@@ -529,14 +529,14 @@ textarea:focus {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 @media (max-width: 900px) {
