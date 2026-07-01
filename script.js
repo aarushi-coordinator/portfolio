@@ -91,6 +91,7 @@ const initPortfolio = () => {
     animateVisibleCounters();
     window.addEventListener('scroll', animateVisibleCounters, { passive: true });
     setTimeout(animateVisibleCounters, 250);
+    counterNumbers.forEach((item) => animateCounter(item));
   } else {
     revealItems.forEach((item) => item.classList.add('visible'));
     counterNumbers.forEach((item) => animateCounter(item));
