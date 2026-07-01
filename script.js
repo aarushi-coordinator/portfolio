@@ -1,4 +1,4 @@
-const toggleTheme = () => {
+window.toggleTheme = () => {
   const currentTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
   applyTheme(currentTheme);
 };
@@ -22,10 +22,10 @@ const currentTheme = savedTheme || (getSystemPrefersDark() ? 'dark' : 'light');
 const applyTheme = (theme) => {
   const isDark = theme === 'dark';
   document.body.classList.toggle('dark', isDark);
-  const themeToggleButton = document.querySelector('.theme-toggle');
+  const themeToggleButton = document.getElementById('theme-toggle');
   if (themeToggleButton) {
     themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    themeToggleButton.textContent = isDark ? '☀️' : '🌙';
+    themeToggleButton.textContent = isDark ? 'Light' : 'Dark';
   }
   try {
     localStorage.setItem('portfolio-theme', theme);
@@ -33,6 +33,8 @@ const applyTheme = (theme) => {
     console.warn('Theme preference could not be saved:', error);
   }
 };
+
+window.applyTheme = applyTheme;
 
 const initPortfolio = () => {
   const menuToggle = document.querySelector('.menu-toggle');
@@ -44,16 +46,28 @@ const initPortfolio = () => {
 
   applyTheme(currentTheme);
 
-  menuToggle?.addEventListener('click', () => {
-    navLinks?.classList.toggle('open');
-  });
+  const themeToggleButton = document.getElementById('theme-toggle');
+  if (themeToggleButton) {
+    themeToggleButton.addEventListener('click', () => {
+      const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+  }
 
-  menuToggle?.addEventListener('click', () => {
-    navLinks?.classList.toggle('open');
-  });
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      if (navLinks) {
+        navLinks.classList.toggle('open');
+      }
+    });
+  }
 
   document.querySelectorAll('.nav-links a').forEach((link) => {
-    link.addEventListener('click', () => navLinks?.classList.remove('open'));
+    link.addEventListener('click', () => {
+      if (navLinks) {
+        navLinks.classList.remove('open');
+      }
+    });
   });
 
   const counterNumbers = Array.from(document.querySelectorAll('.achievements .number[data-count]'));
@@ -133,13 +147,17 @@ const initPortfolio = () => {
   typeLoop();
 
   const handleScroll = () => {
-    backToTop?.classList.toggle('show', window.scrollY > 560);
+    if (backToTop) {
+      backToTop.classList.toggle('show', window.scrollY > 560);
+    }
   };
 
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 
-  backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  if (backToTop) {
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
 
   form?.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -151,19 +169,34 @@ const initPortfolio = () => {
 
     let valid = true;
 
-    if (!name?.value.trim()) {
-      name?.parentElement?.querySelector('.error-text').textContent = 'Please enter your name.';
+    if (!name || !name.value.trim()) {
+      if (name && name.parentElement) {
+        const errorText = name.parentElement.querySelector('.error-text');
+        if (errorText) {
+          errorText.textContent = 'Please enter your name.';
+        }
+      }
       valid = false;
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email?.value.trim() || !emailPattern.test(email.value)) {
-      email?.parentElement?.querySelector('.error-text').textContent = 'Please enter a valid email.';
+    if (!email || !email.value.trim() || !emailPattern.test(email.value)) {
+      if (email && email.parentElement) {
+        const errorText = email.parentElement.querySelector('.error-text');
+        if (errorText) {
+          errorText.textContent = 'Please enter a valid email.';
+        }
+      }
       valid = false;
     }
 
-    if (!message?.value.trim()) {
-      message?.parentElement?.querySelector('.error-text').textContent = 'Please enter your message.';
+    if (!message || !message.value.trim()) {
+      if (message && message.parentElement) {
+        const errorText = message.parentElement.querySelector('.error-text');
+        if (errorText) {
+          errorText.textContent = 'Please enter your message.';
+        }
+      }
       valid = false;
     }
 

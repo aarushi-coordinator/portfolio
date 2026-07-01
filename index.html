@@ -24,7 +24,7 @@
           <a href="#contact">Contact</a>
         </nav>
         <div class="nav-actions">
-          <button class="theme-toggle" aria-label="Switch to dark mode" onclick="toggleTheme()">☀️</button>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode">☀️</button>
         </div>
       </div>
     </header>
@@ -280,39 +280,7 @@
 
     <button class="back-to-top" aria-label="Back to top">↑</button>
 
-    <script src="script.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const counters = Array.from(document.querySelectorAll('.achievements .number[data-count]'));
-        if (!counters.length) return;
-
-        const easeOutQuad = (t) => t * (2 - t);
-        const duration = 1600;
-        const start = performance.now();
-
-        const animate = (now) => {
-          const progress = Math.min((now - start) / duration, 1);
-          const eased = easeOutQuad(progress);
-
-          counters.forEach((element) => {
-            const target = Number(element.dataset.count || 0);
-            const value = Math.floor(eased * target);
-            element.textContent = `${value}${element.dataset.suffix || ''}`;
-          });
-
-          if (progress < 1) {
-            requestAnimationFrame(animate);
-          } else {
-            counters.forEach((element) => {
-              const target = Number(element.dataset.count || 0);
-              element.textContent = `${target}${element.dataset.suffix || ''}`;
-            });
-          }
-        };
-
-        requestAnimationFrame(animate);
-      });
-    </script>
+    <script src="script.js?v=5"></script>
   </body>
 </html>
 
