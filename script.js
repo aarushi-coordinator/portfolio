@@ -25,7 +25,7 @@ const applyTheme = (theme) => {
   const themeToggleButton = document.getElementById('theme-toggle');
   if (themeToggleButton) {
     themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    themeToggleButton.textContent = isDark ? '☀️' : '🌙';
+    themeToggleButton.textContent = isDark ? '🌙' : '☀️';
   }
   try {
     localStorage.setItem('portfolio-theme', theme);
